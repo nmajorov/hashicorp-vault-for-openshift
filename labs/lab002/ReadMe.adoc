@@ -1,11 +1,63 @@
 == lab 002 Vault simple operation
 
+
+Secrets engines in Vault are components which store, generate, or encrypt data.
+
+The kv secrets engine is used to store arbitrary secrets within the
+configured physical storage for Vault. +
+Key names must always be strings.
+
+
+
+Let set kv engine version2.
+
+Now we can do simple kv secret manipulation:
+
+----
+
+  vault secrets enable -version=2 kv
+
+  vault kv put kv/my-secret my-value=s3cr3t
+
+
+  vault kv list   kv/
+
+----
+
+
+Keys
+
+
+----
+
+
+
+    vault kv list   kv/
+
+    ====== Metadata ======
+    Key              Value
+    ---              -----
+    created_time     2020-02-27T13:31:30.913107411Z
+    deletion_time    n/a
+    destroyed        false
+    version          1
+
+    ====== Data ======
+    Key         Value
+    ---         -----
+    my-value    s3cr3t
+
+----
+
+
+
+More info about kv secrets engine you can found
+in vault documentation:
+
+:linkattrs:
+
+https://www.vaultproject.io/docs/secrets/kv/kv-v2[KV Secrets Engine - Version 2,  window="_blank"]
+
+
+
 === Token authentication and policies
-
-
-=== Simple kv secret manipulation
-
-
-
-
- 

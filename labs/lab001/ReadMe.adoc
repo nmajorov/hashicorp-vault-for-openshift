@@ -1,4 +1,87 @@
-== Lab 01 setup vault on OpenShift 
+== Lab 01 setup vault on OpenShift
+
+
+=== Standalone Deployment
+
+Single instance installation
+
+```
+oc new-project hashicorp
+
+oc apply -f ./vault/standalone/install/
+```
+
+The following kubernetes components will be created:
+
+* vault-server-binding ClusterRoleBinding
+* vault ServiceAccount
+* vault-storage PersistentVolumeClaim with 10Gi size
+* vault-config ConfigMap
+* vault Serivce
+* vault Deployment
+* vault Route
+* vault NetworkPolicy
 
 
 
+NOTE:  vault-server-binding ClusterRoleBinding allows vault service account to leverage Kubernetes oauth with the oauth-delegator ClusterRole
+
+////
+
+> In case of OpenShift SDN Multitenant
+>
+
+
+----
+oc adm  pod-network make-projects-global hashicorp
+----
+
+
+
+////
+
+
+=== Initialize and unseal Vault
+
+Initialization is the process by which Vault's storage backend is prepared to receive data. +
+
+When a Vault server is started, it starts in a **sealed state**.
+In this state, Vault is configured to know where and how to access the physical storage,
+but doesn't know how to decrypt any of it. +
+
+
+**Unsealing** is the process of constructing the master key necessary to read the decryption key to decrypt the data, allowing access to the Vault.
+Prior to unsealing, almost no operations are possible with Vault.
+
+
+
+NOTE: This command below cannot be run against already-initialized Vault cluster.
+
+```
+POD=$(oc get pods -lapp.kubernetes.io/name=vault --no-headers -o custom-columns=NAME:.metadata.name)
+oc rsh $POD
+
+vault operator init --tls-skip-verify -key-shares=1 -key-threshold=1
+```
+
+Save the `Unseal Key 1` and the `Initial Root Token`:
+
+```
+Unseal Key 1: 0kTgW1xkR5ffzJIhXq03E/n1hRsejfAvyODyqDu2RZg=
+
+Initial Root Token: s.HwgcebFWZ4cJ6VuqAgHTmkCS
+```
+
+And export them as environment variables, for further use:
+
+```
+export KEYS=0kTgW1xkR5ffzJIhXq03E/n1hRsejfAvyODyqDu2RZg=
+export ROOT_TOKEN=s.HwgcebFWZ4cJ6VuqAgHTmkCS
+export VAULT_TOKEN=$ROOT_TOKEN
+```
+
+Unseal Vault with following command:
+
+```
+vault operator unseal --tls-skip-verify $KEYS
+```
