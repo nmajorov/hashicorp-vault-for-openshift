@@ -4,10 +4,24 @@
 In this directory we have additional scripts to set up correctly path to be able to use vault
 from your workstation
 
+NOTE: you have OpenShift cli tool oc installed.
 
 To setup correctly local path to vault use following command in this directory :
 
-Download valut to current directory 
+Download and install valut to current directory  using commands:
+
+----
+curl -O https://releases.hashicorp.com/vault/1.3.2/vault_1.3.2_linux_amd64.zip
+
+unzip vault_1.3.2_linux_amd64.zip
+
+----
+
+
+
+Only after you successfully setup vault in the lab001
+run this command to login to OpenShift vault from current shell.
+
 ----
 source ./set_env.sh
 ----
