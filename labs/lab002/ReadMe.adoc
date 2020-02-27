@@ -11,21 +11,61 @@ Key names must always be strings.
 
 Let set kv engine version2.
 
-Now we can do simple kv secret manipulation:
+
+* change to labs/common-env directory
+and set environment (if not already done):
 
 ----
+
+source set_env.sh
+
+----
+
+* Login to vault using command:
+
+----
+# use your root token from lab001 !!!
+export ROOT_TOKEN=s.eMMrd20wonymLirGUqmHKncS
+
+vault login --method=token $ROOT_TOKEN
+
+----
+
+you should see similar message:
+
+----
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                  Value
+---                  -----
+token                s.eMMrd20wonymLirGUqmHKncS
+token_accessor       oC5HK0EXzC6cz8RitqfHDpDP
+token_duration       ∞
+token_renewable      false
+token_policies       ["root"]
+identity_policies    []
+policies             ["root"]
+----
+
+
+* Now we can do simple kv secret manipulation:
+
+----
+  export VAULT_TOKEN=$ROOT_TOKEN
 
   vault secrets enable -version=2 kv
 
   vault kv put kv/my-secret my-value=s3cr3t
 
 
-  vault kv list   kv/
+
 
 ----
 
 
-Keys
+* List keys values
 
 
 ----
@@ -48,6 +88,8 @@ Keys
     my-value    s3cr3t
 
 ----
+
+configuration you have successfully set kv secret engine.
 
 
 

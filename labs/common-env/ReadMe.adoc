@@ -1,0 +1,13 @@
+= Environment
+
+
+In this directory we have additional scripts to set up correctly path to be able to use vault
+from your workstation
+
+
+To setup correctly local path to vault use following command in this directory :
+
+Download valut to current directory 
+----
+source ./set_env.sh
+----
